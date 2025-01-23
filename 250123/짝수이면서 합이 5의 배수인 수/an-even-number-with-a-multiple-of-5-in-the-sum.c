@@ -1,10 +1,9 @@
 #include <stdio.h>
 
 void func(int num) {
-    if (num % 2 == 0) {
-        if ((num / 10 + num % 10) % 5 == 0) {
-            printf("Yes");
-        }
+    if ((num % 2 == 0) && ((num / 10 + num % 10) % 5 == 0)) {
+        printf("Yes");
+
     }
     else {
         printf("No");
