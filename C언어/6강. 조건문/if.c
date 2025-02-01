@@ -16,4 +16,6 @@ int main() {
 
 	printf("결과 : %d\n", a);
 
+	return 0;
+
 }
