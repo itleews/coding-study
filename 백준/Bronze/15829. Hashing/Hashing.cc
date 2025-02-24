@@ -12,10 +12,14 @@ int main() {
         str[i] = str[i] - 'a' + 1;
     }
     
-    int hash = 0;
+    long long hash = 0;
+    long long r = 31;
+    long long M = 1234567891;
+    long long power_r = 1;
     
     for (int i = 0; i < N; i++) {
-        hash += str[i] * pow(31, i);
+        hash = (hash + str[i] * power_r) % M;
+        power_r = (power_r * r) % M;
     }
     
     cout << hash << endl;
