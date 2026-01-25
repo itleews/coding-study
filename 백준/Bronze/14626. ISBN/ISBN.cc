@@ -29,27 +29,14 @@ int main()
 		}
 	}
 
-	if (missing_idx % 2 == 0)
+	int weight = (missing_idx % 2 == 0) ? 1 : 3;
+	for (int digit = 0; digit <= 9; digit++)
 	{
-		for (int digit = 0; digit <= 9; digit++)
+		int total = sum + digit * weight;
+		if (total % 10 == 0)
 		{
-			if ((sum + digit) % 10 == 0)
-			{
-				cout << digit << endl;
-				break;
-			}
-		}
-
-	}
-	else
-	{
-		for (int digit = 0; digit <= 9; digit++)
-		{
-			if ((sum + digit * 3) % 10 == 0)
-			{
-				cout << digit << endl;
-				break;
-			}
+			cout << digit << endl;
+			break;
 		}
 	}
 
