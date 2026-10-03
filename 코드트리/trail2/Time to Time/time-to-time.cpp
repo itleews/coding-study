@@ -3,30 +3,19 @@ using namespace std;
 
 int main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-
     int a, b, c, d;
     cin >> a >> b >> c >> d;
 
-    int min = 0;
+    int start = a * 60 + b;
+    int end = c * 60 + d;
 
-    while (a != c || b != d)
+    int result = end - start;
+
+    if (result < 0)
     {
-        b++;
-
-        if (b == 60)
-        {
-            a++;
-            b = 0;
-
-            if (a == 24)
-                a = 0;
-        }
-
-        min++;
+        result += 24 * 60;
     }
-    cout << min << '\n';
+    
+    cout << result << '\n';
     return 0;
 }
