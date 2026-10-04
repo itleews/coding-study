@@ -31,7 +31,7 @@ int main()
     auto result = 0;
     for (int x = 0; x < grid.size(); x++)
     {
-        for (int y = 0; y < grid.size(); y++)
+        for (int y = 0; y < grid[x].size(); y++)
         {
             if (grid[x][y] == 1)
             {
