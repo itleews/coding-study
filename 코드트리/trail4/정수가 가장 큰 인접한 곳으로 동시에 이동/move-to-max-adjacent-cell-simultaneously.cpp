@@ -2,88 +2,104 @@
 #include <vector>
 using namespace std;
 
+struct Ball
+{
+    int r;
+    int c;
+};
+
+pair<int, int> findNextPosition(int r, int c, const vector<vector<int>>& grid, int n)
+{
+    const int dx[4] = { -1, 1, 0, 0 };
+    const int dy[4] = { 0, 0, -1, 1 };
+
+    int maxValue = -1;
+    int nextR = r;
+    int nextC = c;
+
+    for (int d = 0; d < 4; d++)
+    {
+        int nr = r + dx[d];
+        int nc = c + dy[d];
+
+        if (nr < 0 || nr >= n || nc < 0 || nc >= n)
+            continue;
+
+        if (grid[nr][nc] > maxValue)
+        {
+            maxValue = grid[nr][nc];
+            nextR = nr;
+            nextC = nc;
+        }
+    }
+
+    return { nextR, nextC };
+}
+
+void removeCollisions(vector<Ball>& balls)
+{
+    vector<Ball> nextBalls;
+
+    for (int i = 0; i < balls.size(); i++)
+    {
+        bool collision = false;
+
+        for (int j = 0; j < balls.size(); j++)
+        {
+            if (i != j &&
+                balls[i].r == balls[j].r &&
+                balls[i].c == balls[j].c)
+            {
+                collision = true;
+                break;
+            }
+        }
+
+        if (!collision)
+            nextBalls.push_back(balls[i]);
+    }
+
+    balls = nextBalls;
+}
+
 int main()
 {
     int n, m, t;
     cin >> n >> m >> t;
 
     vector<vector<int>> grid(n, vector<int>(n));
-    for (int i = 0; i < n; i++)
+
+    for (int r = 0; r < n; r++)
     {
-        for (int j = 0; j < n; j++)
+        for (int c = 0; c < n; c++)
         {
-            cin >> grid[i][j];
+            cin >> grid[r][c];
         }
     }
 
-    int dx[4] = { -1, 1, 0, 0 };
-    int dy[4] = { 0, 0, -1, 1 };
+    vector<Ball> balls(m);
 
-    vector<int> row(m);
-    vector<int> col(m);
-    for (int i = 0; i < m; i++)
+    for (Ball& ball : balls)
     {
-        cin >> row[i] >> col[i];
-        --row[i]; --col[i];
+        cin >> ball.r >> ball.c;
+        --ball.r;
+        --ball.c;
     }
 
     for (int time = 0; time < t; time++)
     {
-        for (int i = 0; i < row.size(); i++)
+        for (Ball& ball : balls)
         {
-            int maxValue = -1;
-            int maxRow = row[i];
-            int maxCol = col[i];
+            auto [nextR, nextC] = findNextPosition(ball.r, ball.c, grid, n);
 
-            for (int j = 0; j < 4; j++)
-            {
-                int nr = row[i] + dx[j];
-                int nc = col[i] + dy[j];
-
-                if (nr < 0 || nr >= n || nc < 0 || nc >= n)
-                    continue;
-
-                if (grid[nr][nc] > maxValue)
-                {
-                    maxValue = grid[nr][nc];
-                    maxRow = nr;
-                    maxCol = nc;
-                }
-            }
-
-            row[i] = maxRow;
-            col[i] = maxCol;
+            ball.r = nextR;
+            ball.c = nextC;
         }
 
-        vector<int> nextRow;
-        vector<int> nextCol;
-
-        for (int i = 0; i < row.size(); i++)
-        {
-            bool collision = false;
-
-            for (int j = 0; j < row.size(); j++)
-            {
-                if (i != j &&
-                    row[i] == row[j] &&
-                    col[i] == col[j])
-                {
-                    collision = true;
-                    break;
-                }
-            }
-
-            if (!collision)
-            {
-                nextRow.push_back(row[i]);
-                nextCol.push_back(col[i]);
-            }
-        }
-
-        row = nextRow;
-        col = nextCol;
+        removeCollisions(balls);
     }
 
-    cout << row.size();
+    cout << balls.size();
+
     return 0;
 }
