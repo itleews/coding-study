@@ -62,16 +62,17 @@ void Select(int idx, int pickedCount)
         return;
     }
 
-    if (idx >= n * n)
-        return;
+    for (int i = idx; i < n * n; i++)
+    {
+        int r = i / n;
+        int c = i % n;
 
-    int r = idx / n;
-    int c = idx % n;
-    selectedCities.push_back({ r, c });
-    Select(idx + 1, pickedCount + 1);
+        selectedCities.push_back({ r, c });
 
-    selectedCities.pop_back();
-    Select(idx + 1, pickedCount);
+        Select(i + 1, pickedCount + 1);
+
+        selectedCities.pop_back();
+    }
 }
 
 int main()
