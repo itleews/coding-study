@@ -10,40 +10,29 @@ int n;
 vector<vector<int>> grid;
 vector<vector<bool>> visited;
 
-int Block(int& cx, int& cy)
+int curBlockSize = 0;
+
+void Block(int& cx, int& cy, int value)
 {
-    queue<pair<int, int>> q;
-    q.push({ cx, cy });
     visited[cx][cy] = true;
-    int value = grid[cx][cy];
+    curBlockSize++;
 
-    int count = 1;
-    while (!q.empty())
+    for (int i = 0; i < 4; i++)
     {
-        auto [cx, cy] = q.front();
-        q.pop();
+        int nx = cx + dx[i];
+        int ny = cy + dy[i];
 
-        for (int i = 0; i < 4; i++)
-        {
-            int nx = cx + dx[i];
-            int ny = cy + dy[i];
+        if (nx < 0 || nx >= n || ny < 0 || ny >= n)
+            continue;
 
-            if (nx < 0 || nx >= n || ny < 0 || ny >= n)
-                continue;
+        if (visited[nx][ny])
+            continue;
 
-            if (visited[nx][ny])
-                continue;
+        if (grid[nx][ny] != value)
+            continue;
 
-            if (grid[nx][ny] != value)
-                continue;
-
-            count++;
-            q.push({ nx, ny });
-            visited[nx][ny] = true;
-        }
+        Block(nx, ny, value);
     }
-
-    return count;
 }
 
 int main()
@@ -68,9 +57,11 @@ int main()
             if (visited[i][j])
                 continue;
 
-            int curBlock = Block(i, j);
-            maxBlock = max(maxBlock, curBlock);
-            if (curBlock >= 4)
+            curBlockSize = 0;
+            Block(i, j, grid[i][j]);
+
+            maxBlock = max(maxBlock, curBlockSize);
+            if (curBlockSize >= 4)
             {
                 popCount++;
             }
