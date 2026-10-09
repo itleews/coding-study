@@ -12,40 +12,26 @@ vector<vector<int>> grid;
 vector<vector<bool>> visited;
 
 vector<int> person;
+int currenVillageSize = 0;
 
-int Village(int& curX, int& curY)
+void Village(int& curX, int& curY)
 {
-    queue<pair<int, int>> q;
-    q.push({ curX, curY });
     visited[curX][curY] = true;
+    currenVillageSize++;
 
-    int count = 1;
-    while (!q.empty())
+    for (int i = 0; i < 4; i++)
     {
-        auto [cx, cy] = q.front();
-        q.pop();
+        int nx = curX + dx[i];
+        int ny = curY + dy[i];
 
-        for (int i = 0; i < 4; i++)
-        {
-            int nx = cx + dx[i];
-            int ny = cy + dy[i];
+        if (nx < 0 || nx >= n || ny < 0 || ny >= n)
+            continue;
 
-            if (nx < 0 || nx >= n || ny < 0 || ny >= n)
-                continue;
+        if (visited[nx][ny] || grid[nx][ny] == 0)
+            continue;
 
-            if (visited[nx][ny])
-                continue;
-
-            if (grid[nx][ny] == 0)
-                continue;
-
-            q.push({ nx, ny });
-            visited[nx][ny] = true;
-            count++;
-        }
+        Village(nx, ny);
     }
-
-    return count;
 }
 
 int main()
@@ -68,7 +54,9 @@ int main()
         {
             if (grid[i][j] == 1 && !visited[i][j])
             {
-                person.push_back(Village(i, j));
+                currenVillageSize = 0;
+                Village(i, j);
+                person.push_back(currenVillageSize);
             }
         }
     }
